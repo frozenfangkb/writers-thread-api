@@ -1,7 +1,10 @@
 const jwt = require('jsonwebtoken')
 const User = require('../models/User')
 
-const auth = async(req, res, next) => {
+const auth = async (req, res, next) => {
+   if (!req.header('Authorization')) {
+      res.status(403).send({ error: "A valid token must be specified" });
+   }
    const token = req.header('Authorization').replace('Bearer ', '')
    const data = jwt.verify(token, process.env.JWT_KEY)
    try {
