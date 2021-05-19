@@ -17,7 +17,7 @@ const storySchema = mongoose.Schema({
     },
     body: {
         type: String,
-        maxLength: 280
+        maxLength: 500
     }
 });
 
