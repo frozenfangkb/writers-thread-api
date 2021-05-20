@@ -4,6 +4,7 @@ const Story = require('./Story');
 
 const writerSchema = mongoose.Schema({
    user_id: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+   blocked_users: [ { type: mongoose.Schema.Types.ObjectId, ref: 'User' } ],
    stories: [
       {
          type: mongoose.Schema.Types.ObjectId, ref: 'Story'

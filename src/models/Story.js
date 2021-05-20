@@ -15,11 +15,18 @@ const storySchema = mongoose.Schema({
         type: String,
         required: true
     },
-    body: {
-        type: String,
-        maxLength: 500
-    }
-});
+    published: {
+        type: Boolean,
+        default: false
+    },
+    visualizations: {
+        type: Number,
+        default: 0
+    },
+    parts: [{
+        type: mongoose.Schema.Types.ObjectId, ref: 'StoryPart'
+    }]
+}, { timestamps: true });
 
 const Story = mongoose.model('Story', storySchema);
 

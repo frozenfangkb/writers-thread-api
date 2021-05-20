@@ -1,4 +1,5 @@
 const Story = require('../models/Story');
+const StoryPart = require('../models/StoryPart');
 const Writer = require('../models/Writer');
 
 module.exports = {
@@ -33,13 +34,26 @@ module.exports = {
 
     postStory: async (req,res) => {
         try {
+
             const story = new Story({
                 title: req.body.title,
-                body: req.body.storyBody,
                 genre: req.body.genre,
+                parts: [],
                 collaborators: [req.user._id]
             });
 
+            await story.save();
+
+            const storyPart = new StoryPart({
+                user_id: req.user._id,
+                story_id: story._id,
+                approved: true,
+                text: req.body.storyBody
+            });
+
+            await storyPart.save();
+
+            story.parts.push(storyPart._id);
             await story.save();
 
             const writer = await Writer.findOne({ user_id: req.user._id }).exec();
@@ -58,6 +72,20 @@ module.exports = {
             return res.status(200).send({story});
         } catch (error) {
             console.log(error);
+            return res.status(500).send({ message: "Internal server error" });
+        }
+    },
+
+    getStory: async (req,res) => {
+        try {
+            const story = await Story.findById(req.query.storyId);
+
+            if(!story)
+                return res.status(404).send({ message: "Story not found" });
+
+            return res.status(200).send({story});
+        } catch (error) {
+            console.log(error.message);
             return res.status(500).send({ message: "Internal server error" });
         }
     }
