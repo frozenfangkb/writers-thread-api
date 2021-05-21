@@ -4,8 +4,6 @@ const storyRouter = require('./routes/stories');
 const port = process.env.PORT;
 const db = require('./db/db');
 
-db.connectToDb();
-
 const app = express();
 
 app.use(express.urlencoded({ extended: false }));
